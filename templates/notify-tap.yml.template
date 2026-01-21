@@ -1,0 +1,26 @@
+# Notify Homebrew Tap on Formula Changes
+# Copy this to your repo as .github/workflows/notify-tap.yml
+
+name: Notify Homebrew Tap
+
+on:
+  release:
+    types: [published]
+  push:
+    branches: [main]
+    paths:
+      - 'Formula/**'
+      - 'Casks/**'
+      - 'homebrew/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger tap sync
+        env:
+          GH_TOKEN: ${{ secrets.TAP_TRIGGER_TOKEN }}
+        run: |
+          gh api repos/radiolabme/homebrew-tap/dispatches \
+            -f event_type=formula-update \
+            -f client_payload='{"repo":"${{ github.repository }}"}'

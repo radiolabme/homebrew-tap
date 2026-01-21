@@ -1,0 +1,57 @@
+name: Sync Formulas
+
+on:
+  # Run on schedule - checks all repos daily
+  schedule:
+    - cron: '0 6 * * *'  # 6 AM UTC daily
+  
+  # Allow manual trigger
+  workflow_dispatch:
+  
+  # Trigger on push to main (for initial setup)
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync.yml'
+      - 'scripts/sync-formulas.sh'
+
+  # Webhook from other repos (via repository_dispatch)
+  repository_dispatch:
+    types: [formula-update]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout tap
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Sync formulas from radiolabme repos
+        env:
+          GH_TOKEN: ${{ secrets.FORMULA_SYNC_TOKEN }}
+          GITHUB_ORG: radiolabme
+        run: |
+          ./scripts/sync-formulas.sh
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "sync: Update formulas from source repos"
+          git push

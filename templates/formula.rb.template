@@ -1,0 +1,43 @@
+# Example Homebrew Formula Template
+# Copy this to your repo as Formula/<your-tool>.rb
+
+class YourTool < Formula
+  desc "Brief description of your tool"
+  homepage "https://github.com/radiolabme/your-repo"
+  url "https://github.com/radiolabme/your-repo/archive/refs/tags/v1.0.0.tar.gz"
+  sha256 "REPLACE_WITH_SHA256"
+  license "MIT"
+  head "https://github.com/radiolabme/your-repo.git", branch: "main"
+
+  # Uncomment and modify as needed:
+  # depends_on "go" => :build
+  # depends_on "rust" => :build
+  # depends_on "node" => :build
+  # depends_on "python@3.12"
+
+  def install
+    # For Go projects:
+    # system "go", "build", *std_go_args(ldflags: "-s -w")
+    
+    # For Rust projects:
+    # system "cargo", "install", *std_cargo_args
+    
+    # For Node.js projects:
+    # system "npm", "install", *std_npm_args
+    # bin.install_symlink Dir["#{libexec}/bin/*"]
+    
+    # For Python projects:
+    # virtualenv_install_with_resources
+    
+    # For pre-built binaries:
+    # bin.install "your-tool"
+  end
+
+  test do
+    # Add a simple test that verifies the tool works
+    system "#{bin}/your-tool", "--version"
+    
+    # Or test actual functionality:
+    # assert_match "expected output", shell_output("#{bin}/your-tool --help")
+  end
+end
