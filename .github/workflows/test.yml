@@ -1,4 +1,4 @@
-name: Test Formulas
+name: Validate Formulas
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - 'Casks/**'
 
 jobs:
-  test:
+  validate:
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -23,6 +23,7 @@ jobs:
 
       - name: Tap this repo
         run: |
+          brew untap radiolabme/tap 2>/dev/null || true
           brew tap radiolabme/tap "$PWD"
 
       - name: Test formulas
@@ -47,3 +48,8 @@ jobs:
               brew uninstall --cask "radiolabme/tap/$name"
             fi
           done
+
+      - name: Cleanup
+        if: always()
+        run: |
+          brew untap radiolabme/tap 2>/dev/null || true
