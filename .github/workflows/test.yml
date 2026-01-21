@@ -53,3 +53,6 @@ jobs:
         if: always()
         run: |
           brew untap radiolabme/tap 2>/dev/null || true
+          # Create placeholder for setup-homebrew action's post.sh cleanup
+          sudo mkdir -p /opt/homebrew/Library/Taps/radiolabme 2>/dev/null || true
+          sudo touch /opt/homebrew/Library/Taps/radiolabme/homebrew-tap 2>/dev/null || true
