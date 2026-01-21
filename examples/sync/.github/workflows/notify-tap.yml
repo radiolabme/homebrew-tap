@@ -1,0 +1,21 @@
+name: Notify Homebrew Tap
+
+on:
+  release:
+    types: [published]
+  push:
+    branches: [main]
+    paths:
+      - 'Formula/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger tap sync
+        env:
+          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          gh api repos/radiolabme/homebrew-tap/dispatches \
+            -f event_type=formula-update \
+            -f client_payload='{"repo":"${{ github.repository }}"}'

@@ -1,0 +1,18 @@
+# Pre-commit hook definitions for radiolabme/homebrew-tap
+# Other repos reference these via:
+#
+#   - repo: https://github.com/radiolabme/homebrew-tap
+#     rev: main
+#     hooks:
+#       - id: validate-formula
+#         stages: [pre-push]
+
+- id: validate-formula
+  name: Validate Homebrew formula
+  description: Validates Formula/*.rb syntax and required fields
+  entry: scripts/hooks/validate-formula.sh
+  language: script
+  pass_filenames: false
+  stages: [pre-push]
+  files: ^(Formula/.*\.rb|\.goreleaser\.ya?ml)$
+  minimum_pre_commit_version: '2.9.0'

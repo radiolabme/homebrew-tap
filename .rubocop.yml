@@ -1,18 +1,25 @@
 # Homebrew formula style
-require:
-  - rubocop-performance
-
+# Matches Homebrew's own conventions
 AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
   Exclude:
     - 'templates/**/*'
+    - 'examples/**/*'  # Examples use double quotes for clarity
 
 # Homebrew formulas use specific conventions
 Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Homebrew uses double quotes
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# bin/"name" is standard Homebrew style
+Layout/SpaceAroundOperators:
   Enabled: false
 
 # Formula classes are meant to be short

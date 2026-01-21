@@ -1,0 +1,22 @@
+# Pre-commit hooks for radiolabme projects with Homebrew formulas
+#
+# Add this to your repo's .pre-commit-config.yaml:
+#
+#   - repo: https://github.com/radiolabme/homebrew-tap
+#     rev: main  # or pin to a specific commit/tag
+#     hooks:
+#       - id: validate-formula
+#         stages: [pre-push]
+#
+# Then run: pre-commit install --hook-type pre-push
+
+repos:
+  - repo: local
+    hooks:
+      - id: validate-formula
+        name: Validate Homebrew formula
+        entry: scripts/hooks/validate-formula.sh
+        language: script
+        pass_filenames: false
+        stages: [pre-push]
+        files: ^(Formula/.*\.rb|\.goreleaser\.ya?ml)$

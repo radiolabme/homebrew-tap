@@ -1,0 +1,87 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: your-tool
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: your-tool
+    main: ./cmd/your-tool
+    binary: your-tool
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - id: default
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - Merge pull request
+      - Merge branch
+
+release:
+  github:
+    owner: radiolabme
+    name: your-repo
+  draft: false
+  prerelease: auto
+
+brews:
+  - name: your-tool
+    repository:
+      owner: radiolabme
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "feat({{ .ProjectName }}): update to {{ .Tag }}"
+    directory: Formula
+    homepage: "https://github.com/radiolabme/your-repo"
+    description: "Your tool description - keep it short and clear"
+    license: "MIT"
+    skip_upload: false
+
+    # Custom install script (optional - defaults work for most cases)
+    install: |
+      bin.install "your-tool"
+
+    # Test block - verify installation works
+    test: |
+      system "#{bin}/your-tool", "--version"
+
+    # Dependencies (uncomment as needed)
+    # dependencies:
+    #   - name: git
+    #   - name: go
+    #     type: build
