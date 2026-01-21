@@ -33,7 +33,7 @@ jobs:
       
       - name: Sync formulas from radiolabme repos
         env:
-          GH_TOKEN: ${{ secrets.FORMULA_SYNC_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           GITHUB_ORG: radiolabme
         run: |
           ./scripts/sync-formulas.sh
