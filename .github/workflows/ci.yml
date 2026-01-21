@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Formula/**'
+      - 'Casks/**'
+  pull_request:
+    paths:
+      - 'Formula/**'
+      - 'Casks/**'
+
+jobs:
+  test-formulas:
+    name: Test Formulas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Tap repository
+        run: |
+          brew untap radiolabme/tap 2>/dev/null || true
+          brew tap radiolabme/tap "$PWD"
+
+      - name: Audit formulas
+        run: |
+          for formula in Formula/*.rb; do
+            if [[ -f "$formula" && "$formula" != *".gitkeep"* ]]; then
+              name=$(basename "$formula" .rb)
+              echo "Auditing $name..."
+              brew audit --strict --online "radiolabme/tap/$name" || true
+            fi
+          done
+
+      - name: Install and test formulas
+        run: |
+          for formula in Formula/*.rb; do
+            if [[ -f "$formula" && "$formula" != *".gitkeep"* ]]; then
+              name=$(basename "$formula" .rb)
+              echo "Installing $name..."
+              brew install "radiolabme/tap/$name" || exit 1
+              echo "Testing $name..."
+              brew test "radiolabme/tap/$name" || true
+              brew uninstall "$name"
+            fi
+          done
+
+      - name: Install and test casks
+        run: |
+          for cask in Casks/*.rb; do
+            if [[ -f "$cask" && "$cask" != *".gitkeep"* ]]; then
+              name=$(basename "$cask" .rb)
+              echo "Installing cask $name..."
+              brew install --cask "radiolabme/tap/$name" || exit 1
+              brew uninstall --cask "$name"
+            fi
+          done
+
+      - name: Cleanup
+        if: always()
+        run: |
+          brew untap radiolabme/tap 2>/dev/null || true
+          sudo rm -rf /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/radiolabme/homebrew-tap || true
+          sudo rm -rf /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/radiolabme || true
+          sudo mkdir -p /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/radiolabme || true
+          sudo touch /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/radiolabme/homebrew-tap || true
