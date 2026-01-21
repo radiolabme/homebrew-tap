@@ -1,0 +1,26 @@
+# Homebrew formula style
+require:
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  Exclude:
+    - 'templates/**/*'
+
+# Homebrew formulas use specific conventions
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Formula classes are meant to be short
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 30
+
+Layout/LineLength:
+  Max: 120

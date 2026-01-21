@@ -30,12 +30,12 @@ CASKS_FOUND=0
 for repo in $REPOS; do
   # Skip this tap repo itself
   [[ "$repo" == "homebrew-tap" ]] && continue
-  
+
   log "Checking $ORG/$repo..."
-  
+
   # Check for Formula directory in repo
   FORMULA_FILES=$(gh api "repos/$ORG/$repo/contents/Formula" --jq '.[].name' 2>/dev/null || true)
-  
+
   if [[ -n "$FORMULA_FILES" ]]; then
     log "  Found formulas in $repo"
     for formula in $FORMULA_FILES; do
@@ -46,10 +46,10 @@ for repo in $REPOS; do
       fi
     done
   fi
-  
+
   # Check for Casks directory in repo
   CASK_FILES=$(gh api "repos/$ORG/$repo/contents/Casks" --jq '.[].name' 2>/dev/null || true)
-  
+
   if [[ -n "$CASK_FILES" ]]; then
     log "  Found casks in $repo"
     for cask in $CASK_FILES; do
@@ -60,10 +60,10 @@ for repo in $REPOS; do
       fi
     done
   fi
-  
+
   # Also check for homebrew/ directory (alternative convention)
   HOMEBREW_FORMULAS=$(gh api "repos/$ORG/$repo/contents/homebrew/Formula" --jq '.[].name' 2>/dev/null || true)
-  
+
   if [[ -n "$HOMEBREW_FORMULAS" ]]; then
     log "  Found formulas in $repo/homebrew/Formula"
     for formula in $HOMEBREW_FORMULAS; do
@@ -79,5 +79,9 @@ done
 log "Sync complete: $FORMULAS_FOUND formulas, $CASKS_FOUND casks"
 
 # Clean up .gitkeep if we have actual formulas
-[[ $FORMULAS_FOUND -gt 0 ]] && rm -f "$FORMULA_DIR/.gitkeep" || true
-[[ $CASKS_FOUND -gt 0 ]] && rm -f "$CASKS_DIR/.gitkeep" || true
+if [[ $FORMULAS_FOUND -gt 0 ]]; then
+  rm -f "$FORMULA_DIR/.gitkeep"
+fi
+if [[ $CASKS_FOUND -gt 0 ]]; then
+  rm -f "$CASKS_DIR/.gitkeep"
+fi

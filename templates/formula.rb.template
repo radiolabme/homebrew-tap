@@ -18,17 +18,17 @@ class YourTool < Formula
   def install
     # For Go projects:
     # system "go", "build", *std_go_args(ldflags: "-s -w")
-    
+
     # For Rust projects:
     # system "cargo", "install", *std_cargo_args
-    
+
     # For Node.js projects:
     # system "npm", "install", *std_npm_args
     # bin.install_symlink Dir["#{libexec}/bin/*"]
-    
+
     # For Python projects:
     # virtualenv_install_with_resources
-    
+
     # For pre-built binaries:
     # bin.install "your-tool"
   end
@@ -36,7 +36,7 @@ class YourTool < Formula
   test do
     # Add a simple test that verifies the tool works
     system "#{bin}/your-tool", "--version"
-    
+
     # Or test actual functionality:
     # assert_match "expected output", shell_output("#{bin}/your-tool --help")
   end

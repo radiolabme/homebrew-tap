@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: ["-e", "SC2086"]  # Allow word splitting where intentional
+
+  - repo: https://github.com/rubocop/rubocop
+    rev: v1.59.0
+    hooks:
+      - id: rubocop
+        args: ["--config", ".rubocop.yml"]
+        types: [ruby]
