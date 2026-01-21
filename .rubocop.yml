@@ -29,5 +29,9 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Max: 30
 
+# Goreleaser formulas have large on_macos/on_linux blocks
+Metrics/BlockLength:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
