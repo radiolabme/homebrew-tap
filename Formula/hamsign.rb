@@ -5,13 +5,13 @@
 class Hamsign < Formula
   desc "CLI tools for amateur radio digital signing and certificate management"
   homepage "https://github.com/radiolabme/hamsign"
-  version "0.1.5"
+  version "0.1.0"
   license "BSD-3-Clause"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.5/hamsign_0.1.5_darwin_x86_64.tar.gz"
-      sha256 "456e0ebe41ad00aca026bf2b924591384a417e1d07a3b30355fd05d3f2ada809"
+      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.0/hamsign_0.1.0_darwin_x86_64.tar.gz"
+      sha256 "196bfe41040c60020b2b9460fb2ac583017bfe6f720fb90a69ab73a72ea1dd99"
 
       def install
         bin.install "loadcert"
@@ -20,8 +20,8 @@ class Hamsign < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.5/hamsign_0.1.5_darwin_aarch64.tar.gz"
-      sha256 "8012b00e8d14a1a05dd7455c7714b43a84f189137e1d2d883ec30b0ffa3c808d"
+      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.0/hamsign_0.1.0_darwin_aarch64.tar.gz"
+      sha256 "e3fc6d1b8d622318d688eeba82e7db2cc03b4bfb5d21263b89308a4e2bf548c4"
 
       def install
         bin.install "loadcert"
@@ -33,8 +33,8 @@ class Hamsign < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.5/hamsign_0.1.5_linux_x86_64.tar.gz"
-      sha256 "299d89c8a684b5329322463dbb1d2e6374720dd9fe24395ddbd9b930ca5f69d9"
+      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.0/hamsign_0.1.0_linux_x86_64.tar.gz"
+      sha256 "f366a0185bbd6d5f134b5621c78d3300cf1e904e8a47a2be0f3ff47890aefe6c"
       def install
         bin.install "loadcert"
         bin.install "signdata"
@@ -42,8 +42,8 @@ class Hamsign < Formula
       end
     end
     if Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.5/hamsign_0.1.5_linux_armv6.tar.gz"
-      sha256 "46f2dc79077ed191b3531a526591692c7f016682e922ec6aca1035dfc6cd27b2"
+      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.0/hamsign_0.1.0_linux_armv6.tar.gz"
+      sha256 "ae0bdebfa245c116144a4669d69130d7a6a15bd020d45fdcaaa7cea01b2c6809"
       def install
         bin.install "loadcert"
         bin.install "signdata"
@@ -51,8 +51,8 @@ class Hamsign < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.5/hamsign_0.1.5_linux_aarch64.tar.gz"
-      sha256 "f508f03446ca5d1d7a9cecb8286ff79758436a9ad31824a4c7307c15fa105420"
+      url "https://github.com/radiolabme/hamsign/releases/download/v0.1.0/hamsign_0.1.0_linux_aarch64.tar.gz"
+      sha256 "2e936262af23c08f327e381d9f7b9627d7359f7bc4b6cdf5b4596ce77d752cb4"
       def install
         bin.install "loadcert"
         bin.install "signdata"
