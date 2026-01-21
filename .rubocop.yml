@@ -37,5 +37,12 @@ Metrics/BlockLength:
 Style/MethodDefinedInBlock:
   Enabled: false
 
+# Goreleaser may use explicit array syntax
+Style/SymbolArray:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
