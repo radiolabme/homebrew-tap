@@ -19,3 +19,13 @@ repos:
       - id: rubocop
         args: ["--config", ".rubocop.yml"]
         types: [ruby]
+
+  # Local hooks
+  - repo: local
+    hooks:
+      - id: validate-formula
+        name: Validate Homebrew formulas
+        entry: ./scripts/hooks/validate-formula.sh
+        language: script
+        files: ^Formula/.*\.rb$
+        stages: [push]

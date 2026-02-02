@@ -58,27 +58,27 @@ release:
 
 brews:
   - name: your-tool
+    ids:
+      - default
     repository:
       owner: radiolabme
       name: homebrew-tap
+      branch: main
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    commit_author:
-      name: goreleaserbot
-      email: bot@goreleaser.com
-    commit_msg_template: "feat({{ .ProjectName }}): update to {{ .Tag }}"
     directory: Formula
     homepage: "https://github.com/radiolabme/your-repo"
     description: "Your tool description - keep it short and clear"
     license: "MIT"
-    skip_upload: false
+    # Skip upload if token not set (allows local testing)
+    skip_upload: "{{ if .Env.HOMEBREW_TAP_TOKEN }}false{{ else }}true{{ end }}"
 
-    # Custom install script (optional - defaults work for most cases)
+    # Custom install script
     install: |
       bin.install "your-tool"
 
     # Test block - verify installation works
     test: |
-      system "#{bin}/your-tool", "--version"
+      system "#{bin}/your-tool", "--help"
 
     # Dependencies (uncomment as needed)
     # dependencies:

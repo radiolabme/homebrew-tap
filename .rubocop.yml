@@ -33,10 +33,6 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Enabled: false
 
-# Goreleaser defines install/test methods inside on_macos/on_linux blocks
-Style/MethodDefinedInBlock:
-  Enabled: false
-
 # Goreleaser may use explicit array syntax
 Style/SymbolArray:
   Enabled: false

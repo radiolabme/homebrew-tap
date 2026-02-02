@@ -6,22 +6,78 @@ on:
     paths:
       - 'Formula/**'
       - 'Casks/**'
+      - 'Makefile'
+      - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - 'Formula/**'
       - 'Casks/**'
+      - 'Makefile'
+
+permissions:
+  contents: write
 
 env:
   TAP_OWNER: ${{ github.repository_owner }}
   TAP_NAME: ${{ github.repository_owner }}/tap
 
 jobs:
-  test-formulas:
-    name: Test Formulas
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install linters
+        run: |
+          gem install rubocop
+          sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Lint Ruby files
+        run: rubocop --config .rubocop.yml Formula/ Casks/ || true
+
+      - name: Lint shell scripts
+        run: shellcheck -e SC2086 scripts/**/*.sh || true
+
+  test-formulas:
+    name: Test Formulas
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Transform goreleaser formulas
+        uses: stuffbucket/homebrew-transform@v1
+        with:
+          formula-path: Formula
+          fix-multiarch: true
+          fix-style: true
+
+      - name: Show transform diff
+        run: |
+          echo "==> Changes made by homebrew-transform:"
+          git diff Formula/ || echo "No changes"
+
+      - name: Commit formula fixes
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [[ -n $(git status --porcelain Formula/) ]]; then
+            git add Formula/
+            git commit -m "chore: auto-fix formula syntax via homebrew-transform"
+            git push
+          fi
 
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
@@ -37,7 +93,7 @@ jobs:
             if [[ -f "$formula" && "$formula" != *".gitkeep"* ]]; then
               name=$(basename "$formula" .rb)
               echo "Auditing $name..."
-              brew audit --strict --online "$TAP_NAME/$name" || true
+              brew audit --strict --online "$TAP_NAME/$name"
             fi
           done
 

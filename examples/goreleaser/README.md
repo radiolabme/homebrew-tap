@@ -20,6 +20,12 @@ This example shows how to configure a Go project to automatically publish to the
 3. Goreleaser:
    - Builds binaries for all platforms
    - Creates GitHub release with artifacts
-   - Generates Homebrew formula
+   - Generates Homebrew formula (multi-arch)
    - Pushes formula to `radiolabme/homebrew-tap`
-4. Users can immediately install: `brew install radiolabme/tap/your-tool`
+4. The tap's CI automatically runs `homebrew-transform` to fix any syntax/style issues
+5. Homebrew audit validates the fixed formula
+6. Users can immediately install: `brew install radiolabme/tap/your-tool`
+
+## Multi-arch Support
+
+Goreleaser generates formulas with `on_macos` and `on_linux` blocks for multi-arch binaries. The tap automatically transforms these formulas to fix any formatting or style issues before running Homebrew audit validation.
