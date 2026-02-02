@@ -67,7 +67,7 @@ jobs:
           git diff Formula/ || echo "No changes"
 
       - name: Commit formula fixes
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && env.ACT != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -82,11 +82,16 @@ jobs:
 
       - name: Tap repository
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
           brew untap "$TAP_NAME" 2>/dev/null || true
           brew tap "$TAP_NAME" "$PWD"
+          # Copy transformed formulas over tapped versions (tap clones from remote, misses local changes)
+          TAP_DIR="$(brew --repo "$TAP_NAME")"
+          cp -v Formula/*.rb "$TAP_DIR/Formula/" 2>/dev/null || true
 
       - name: Audit formulas
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
           for formula in Formula/*.rb; do
             if [[ -f "$formula" && "$formula" != *".gitkeep"* ]]; then
               name=$(basename "$formula" .rb)
@@ -97,6 +102,7 @@ jobs:
 
       - name: Install and test formulas
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
           for formula in Formula/*.rb; do
             if [[ -f "$formula" && "$formula" != *".gitkeep"* ]]; then
               name=$(basename "$formula" .rb)
@@ -110,6 +116,7 @@ jobs:
 
       - name: Install and test casks
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
           for cask in Casks/*.rb; do
             if [[ -f "$cask" && "$cask" != *".gitkeep"* ]]; then
               name=$(basename "$cask" .rb)
@@ -122,6 +129,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
           brew untap "$TAP_NAME" 2>/dev/null || true
           TAP_PATH="/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/$TAP_OWNER"
           sudo rm -rf "$TAP_PATH/homebrew-tap" || true

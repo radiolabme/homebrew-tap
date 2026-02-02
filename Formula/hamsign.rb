@@ -31,13 +31,13 @@ class Hamsign < Formula
       sha256("2e936262af23c08f327e381d9f7b9627d7359f7bc4b6cdf5b4596ce77d752cb4")
     end
   end
-  test do
-    system("#{bin}/loadcert", "--help")
-  end
 
   def install
     bin.install("loadcert")
     bin.install("signdata")
     bin.install("verifycert")
+  end
+  test do
+    system("#{bin}/loadcert", "--help")
   end
 end

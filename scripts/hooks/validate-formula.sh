@@ -29,26 +29,27 @@ if [[ -d "Formula" ]]; then
       ((ERRORS++))
     fi
 
-    if ! grep -q 'desc "' "$formula"; then
+    # Accept both DSL styles: desc "..." and desc("...")
+    if ! grep -qE 'desc[[:space:]]+"' "$formula" && ! grep -qE 'desc\(' "$formula"; then
       echo "  ✗ Missing 'desc' field"
       ((ERRORS++))
     fi
 
-    if ! grep -q 'homepage "' "$formula"; then
+    if ! grep -qE 'homepage[[:space:]]+"' "$formula" && ! grep -qE 'homepage\(' "$formula"; then
       echo "  ✗ Missing 'homepage' field"
       ((ERRORS++))
     fi
 
-    if ! grep -q 'url "' "$formula" && ! grep -q 'head "' "$formula"; then
+    if ! grep -qE 'url[[:space:]]+"' "$formula" && ! grep -qE 'url\(' "$formula" && ! grep -qE 'head[[:space:]]+"' "$formula" && ! grep -qE 'head\(' "$formula"; then
       echo "  ✗ Missing 'url' or 'head' field"
       ((ERRORS++))
     fi
 
-    if ! grep -q 'sha256 "' "$formula" && ! grep -q 'head "' "$formula"; then
+    if ! grep -qE 'sha256[[:space:]]+"' "$formula" && ! grep -qE 'sha256\(' "$formula" && ! grep -qE 'head[[:space:]]+"' "$formula" && ! grep -qE 'head\(' "$formula"; then
       echo "  ⚠ Missing 'sha256' (required unless head-only)"
     fi
 
-    if ! grep -q 'license "' "$formula"; then
+    if ! grep -qE 'license[[:space:]]+"' "$formula" && ! grep -qE 'license\(' "$formula"; then
       echo "  ⚠ Missing 'license' field (recommended)"
     fi
 
