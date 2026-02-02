@@ -59,9 +59,7 @@ jobs:
       - name: Transform goreleaser formulas
         uses: stuffbucket/homebrew-transform@v1
         with:
-          formula-path: Formula
-          fix-multiarch: true
-          fix-style: true
+          files: Formula/*.rb
 
       - name: Show transform diff
         run: |

@@ -42,10 +42,10 @@ install: hooks ## Install git hooks (alias for hooks)
 validate: ## Run formula validation script
 	@./scripts/hooks/validate-formula.sh
 
-hooks: ## Install git hooks (pre-push runs CI before push)
+hooks: ## Install git hooks (pre-push runs lint before push)
 	@mkdir -p .git/hooks
 	@echo '#!/bin/sh' > .git/hooks/pre-push
-	@echo 'make ci' >> .git/hooks/pre-push
+	@echo 'make ci-lint' >> .git/hooks/pre-push
 	@chmod +x .git/hooks/pre-push
 	@echo '#!/bin/sh' > .git/hooks/commit-msg
 	@echo '# Validate conventional commit format' >> .git/hooks/commit-msg
